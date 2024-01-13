@@ -7,7 +7,7 @@ with open("./README_zh.md", encoding="utf-8") as f:
 
 setuptools.setup(
     name="plmidi",
-    version="1.0.3",
+    version="1.0.4",
     author="Goodenough",
     author_email="2381642961@qq.com",
     description="midi player for Python Package physicsLab",
@@ -15,7 +15,6 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://gitee.com/script2000/physicsLab",
     license="MIT",
-    packages=setuptools.find_packages(),
     python_requires='>=3.6',
     classifiers=[
         "Programming Language :: Python :: 3",

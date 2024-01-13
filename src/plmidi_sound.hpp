@@ -3,7 +3,6 @@
 #pragma comment(lib, "winmm.lib")
 
 #include <string>
-#include <iostream>
 #include <signal.h> /* Press ctrl+C to exit */
 #include <Windows.h>
 #include <mmsystem.h>
@@ -21,6 +20,7 @@ namespace plmidi::details {
 static void plmidi_exit(int signal)
 {
     if (signal == SIGINT) {
+        ::std::cout << "\r";
         py::print("\r\n");
         Py_Exit(0);
     }
