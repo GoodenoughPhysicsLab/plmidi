@@ -4,11 +4,15 @@
 
 #include <string>
 #include <signal.h> /* Press ctrl+C to exit */
+#ifdef _WIN32
 #include <Windows.h>
 #include <mmsystem.h>
+#endif
 
 #include "process_bat.hpp"
 #include "pybind11/pybind11.h"
+
+#ifdef _WIN32
 
 namespace py = pybind11;
 
@@ -164,3 +168,5 @@ void sound_by_mciSendCommand(py::str path, float midi_duration)
 }
 
 } // namespace _plmidi
+
+#endif

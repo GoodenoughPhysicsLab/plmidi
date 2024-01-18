@@ -11,9 +11,10 @@ setuptools.setup(
     author="Goodenough",
     author_email="2381642961@qq.com",
     description="midi player for Python Package physicsLab",
-    long_description=long_description,
+    long_description="show detils in [github](https://github.com/GoodenoughPhysicsLab/plmidi)",
     long_description_content_type="text/markdown",
-    url="https://gitee.com/script2000/physicsLab",
+    url="https://github.com/GoodenoughPhysicsLab/plmidi",
+    packages=setuptools.find_packages(),
     license="MIT",
     python_requires='>=3.6',
     classifiers=[
@@ -24,9 +25,9 @@ setuptools.setup(
     ],
     ext_modules=[
         setuptools.Extension(
-            "plmidi",
+            "plmidi_cpp",
             sources=[
-                "./src/plmidi_setup.cpp"
+                "./plmidi_cpp/plmidi_setup.cpp"
             ],
             extra_compile_args=[
                 "/std:c++20"
