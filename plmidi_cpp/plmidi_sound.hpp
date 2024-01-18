@@ -115,7 +115,7 @@ void sound_by_midiOutShortMsg(py::list piece, int tempo)
     midiOutClose(handle);
 }
 
-void sound_by_mciSendCommand(py::str path, float midi_duration)
+void sound_by_mciSendCommand(py::str path, int midi_duration)
 {
     // I don't know why this will fail to play
     // const char *cpath = path.cast<::std::string>().c_str();

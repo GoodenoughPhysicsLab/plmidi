@@ -1,3 +1,4 @@
+import math
 import os.path as path
 
 try:
@@ -15,4 +16,4 @@ def sound(midifile: str):
     for msg in mido.MidiFile(midifile):
         midi_duration += msg.time
     
-    plmidi_cpp.sound_by_mciSendCommand(midifile, midi_duration)
+    plmidi_cpp.sound_by_mciSendCommand(midifile, math.ceil(midi_duration))
