@@ -14,11 +14,11 @@ class MidiProcessBar {
     int _status = 0;
     time_t _now_time = 0;
     int _midi_duration = 0;
-    int _unit_time = 0;
+    float _unit_time = 0;
 public:
-    MidiProcessBar(int midi_duration) {
+    MidiProcessBar(float midi_duration) {
         this->_unit_time = midi_duration / this->_length;
-        this->_midi_duration = midi_duration;
+        this->_midi_duration = static_cast<int>(midi_duration);
     }
 
     ~MidiProcessBar() {

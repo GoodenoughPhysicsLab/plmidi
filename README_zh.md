@@ -1,7 +1,7 @@
 # plmidi
 
 ## 介绍
-`[physicsLab](https://github.com/GoodenoughPhysicsLab/plmidi)`的`music`中的二进制拓展实现部分  
+[physicsLab](https://github.com/GoodenoughPhysicsLab/plmidi)的`music`中的二进制拓展实现部分  
 之所以单独将`plmidi`分离出来，是因为`physicsLab`比`plmidi`更通用
 而physicsLab的midi拓展是一个可有可无的功能（虽然我怀着极大的热情写了相关代码），因此我将本应是physicsLab的一部分的库分离出来
 
