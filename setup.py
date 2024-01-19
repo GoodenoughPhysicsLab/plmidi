@@ -2,9 +2,9 @@ import platform
 import setuptools
 
 if platform.system() == "Windows":
-    compile_arg = "/std:c++20"
+    compile_args = ["/std:c++20"]
 else:
-    compile_arg = "-std=c++20"
+    compile_args = ["-std=c++20", "-Werror"]
 
 setuptools.setup(
     name="plmidi",
@@ -16,6 +16,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/GoodenoughPhysicsLab/plmidi",
     packages=setuptools.find_packages(),
+    install_requires=["mido"],
     license="MIT",
     python_requires='>=3.6',
     classifiers=[
@@ -26,13 +27,16 @@ setuptools.setup(
     ],
     ext_modules=[
         setuptools.Extension(
-            "plmidi_cpp",
+            name="plmidi_cpp",
+            language="c++",
             sources=[
-                "./plmidi_cpp/plmidi_setup.cpp"
+                "plmidi_cpp/setup.cpp"
             ],
-            extra_compile_args=[
-                compile_arg
-            ]
+            include_dirs=[
+                "plmidi_cpp",
+                "plmidi_cpp/pybind11"
+            ],
+            extra_compile_args=compile_args
         )
     ]
 )

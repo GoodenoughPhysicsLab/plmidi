@@ -9,7 +9,7 @@ build/
 *.egg-info/
 __pycache__/
 
-
+*.i
 *.pyc
 *.pyd
 *.txt

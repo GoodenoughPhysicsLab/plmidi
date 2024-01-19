@@ -66,7 +66,7 @@ struct OpenMidiFileError : public ::std::exception
     }
 };
 
-#ifdef _WIN32
+#if 0
 // input -> mido.MidiTrack, tempo: int
 // class mido.MidiTrack(list)
 void sound_by_midiOutShortMsg(py::list piece, int tempo)
@@ -115,7 +115,9 @@ void sound_by_midiOutShortMsg(py::list piece, int tempo)
 #endif // PLMIDI_DEBUG
     midiOutClose(handle);
 }
+#endif
 
+#ifdef _WIN32
 void sound_by_mciSendCommand(py::str path, float midi_duration)
 {
     // I don't know why this will fail to play

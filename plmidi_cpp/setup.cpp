@@ -1,4 +1,4 @@
-#include "plmidi_sound.hpp"
+#include "sound.hpp"
 
 PYBIND11_MODULE(plmidi_cpp, m) {
     m.def("sound", plmidi::sound);
