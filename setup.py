@@ -1,8 +1,5 @@
 import platform
 import setuptools
-import subprocess
-
-subprocess.call("release.bat")
 
 if platform.system() == "Windows":
     compile_args = ["/std:c++20"]
@@ -32,6 +29,9 @@ setuptools.setup(
         setuptools.Extension(
             name="plmidi_cpp",
             language="c++",
+            include_dirs=[
+                "plmidi_cpp"
+            ],
             sources=[
                 "plmidi_cpp/setup.cpp"
             ],

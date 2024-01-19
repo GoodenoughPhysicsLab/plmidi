@@ -16,8 +16,6 @@
 
 namespace py = pybind11;
 
-static int8_t plmidi_initflag = 0; // -1: fail, 0: ready to init, 1: success initialized
-
 namespace plmidi::details {
 
 // if Ctrl+C, then exit
@@ -67,6 +65,8 @@ struct OpenMidiFileError : public ::std::exception
 };
 
 #if 0
+static int8_t plmidi_initflag = 0; // -1: fail, 0: ready to init, 1: success initialized
+
 // input -> mido.MidiTrack, tempo: int
 // class mido.MidiTrack(list)
 void sound_by_midiOutShortMsg(py::list piece, int tempo)
