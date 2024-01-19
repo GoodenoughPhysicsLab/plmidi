@@ -12,8 +12,8 @@ on:
   release:
     types: [published]
 
-permissions:
-  contents: read
+# permissions:
+#   contents: read
 
 jobs:
   deploy:
@@ -30,6 +30,7 @@ jobs:
         python-version: '3.x'
     - name: Install dependencies
       run: |
+        dir
         python -m pip install --upgrade pip
         pip install build twine wheel setuptools
     - name: Build package
