@@ -1,18 +1,18 @@
 #pragma once
 
+#ifdef _WIN32
 #pragma comment(lib, "winmm.lib")
+#endif // _WIN32
 
 #include <string>
 #include <signal.h> /* Press ctrl+C to exit */
 #ifdef _WIN32
 #include <Windows.h>
 #include <mmsystem.h>
-#endif
+#endif // _WIN32
 
-#include "process_bat.hpp"
+#include "process_bar.hpp"
 #include "pybind11/pybind11.h"
-
-#ifdef _WIN32
 
 namespace py = pybind11;
 
@@ -66,6 +66,7 @@ struct OpenMidiFileError : public ::std::exception
     }
 };
 
+#ifdef _WIN32
 // input -> mido.MidiTrack, tempo: int
 // class mido.MidiTrack(list)
 void sound_by_midiOutShortMsg(py::list piece, int tempo)
@@ -166,7 +167,16 @@ void sound_by_mciSendCommand(py::str path, float midi_duration)
         throw plmidiExc_InitErr("Failed to close MIDI device");
     }
 }
+#endif // _WIN32
 
-} // namespace _plmidi
-
+void sound(py::str path, float midi_duration)
+{
+#ifdef _WIN32
+    sound_by_mciSendCommand(path, midi_duration);
+#else
+    signal(SIGINT, details::plmidi_exit);
+    py::print("can not support sound plmidi on os except windows");
 #endif
+}
+
+} // namespace plmidi

@@ -1,9 +1,10 @@
-#encoding=utf-8
+import platform
 import setuptools
 
-long_description = None
-with open("./README_zh.md", encoding="utf-8") as f:
-    long_description = f.read()
+if platform.system() == "Windows":
+    compile_arg = "/std:c++20"
+else:
+    compile_arg = "-std=c++20"
 
 setuptools.setup(
     name="plmidi",
@@ -30,7 +31,7 @@ setuptools.setup(
                 "./plmidi_cpp/plmidi_setup.cpp"
             ],
             extra_compile_args=[
-                "/std:c++20"
+                compile_arg
             ]
         )
     ]

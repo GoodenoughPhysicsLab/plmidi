@@ -3,8 +3,8 @@ import os.path as path
 
 try:
     import mido
-except ImportError as e:
-    e("can not use physicsLab.music, type `pip install mido`")
+except ImportError:
+    print("can not use physicsLab.music, type `pip install mido`")
 
 import plmidi_cpp
 
@@ -16,4 +16,4 @@ def sound(midifile: str):
     for msg in mido.MidiFile(midifile):
         midi_duration += msg.time
     
-    plmidi_cpp.sound_by_mciSendCommand(midifile, math.ceil(midi_duration))
+    plmidi_cpp.sound(midifile, math.ceil(midi_duration))
