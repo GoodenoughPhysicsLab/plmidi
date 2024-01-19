@@ -1,5 +1,8 @@
 import platform
 import setuptools
+import subprocess
+
+subprocess.call("release.bat")
 
 if platform.system() == "Windows":
     compile_args = ["/std:c++20"]
@@ -30,11 +33,7 @@ setuptools.setup(
             name="plmidi_cpp",
             language="c++",
             sources=[
-                "plmidi_cpp/setup.cpp"
-            ],
-            include_dirs=[
-                "plmidi_cpp",
-                "plmidi_cpp/pybind11"
+                "release/release.cpp"
             ],
             extra_compile_args=compile_args
         )
