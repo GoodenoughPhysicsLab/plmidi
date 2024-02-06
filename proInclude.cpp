@@ -6,8 +6,6 @@
 #include <iostream>
 #include <filesystem>
 
-#define PI_DEBUG
-
 namespace stdf = std::filesystem;
 
 namespace detail {
