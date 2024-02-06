@@ -4,7 +4,7 @@ import setuptools
 if platform.system() == "Windows":
     compile_args = ["/std:c++20"]
 else:
-    compile_args = ["-std=c++20", "-Werror"]
+    compile_args = ["-std=c++20"]
 
 setuptools.setup(
     name="plmidi",
@@ -29,11 +29,8 @@ setuptools.setup(
         setuptools.Extension(
             name="plmidi_cpp",
             language="c++",
-            include_dirs=[
-                "plmidi_cpp"
-            ],
             sources=[
-                "plmidi_cpp/setup.cpp"
+                "release/release.cpp"
             ],
             extra_compile_args=compile_args
         )

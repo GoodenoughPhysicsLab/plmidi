@@ -2,8 +2,10 @@
 /.idea
 /.vscode
 
+test/
 venv/
 dist/
+.venv/
 build/
 release/
 *.egg-info/
@@ -22,4 +24,4 @@ __pycache__/
 *.json
 
 *.test.*
-physicsLab/
+proInclude

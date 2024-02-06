@@ -31,10 +31,12 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install build setuptools wheel
+        pip install build
     - name: Build package
       run: |
-        python setup.py bdist_wheel
+        g++ ./proInclude.cpp -o proInclude -std=c++20 -Ofast -fno-exceptions -fno-rtti
+        ./proInclude plmidi_cpp/setup.cpp
+        python -m build
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       with:

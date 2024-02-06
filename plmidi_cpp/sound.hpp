@@ -22,8 +22,7 @@ namespace plmidi::details {
 static void plmidi_exit(int signal)
 {
     if (signal == SIGINT) {
-        ::std::cout << "\r";
-        py::print("\r\n");
+        puts("\n");
         Py_Exit(0);
     }
 }
@@ -115,9 +114,10 @@ void sound_by_midiOutShortMsg(py::list piece, int tempo)
 #endif // PLMIDI_DEBUG
     midiOutClose(handle);
 }
-#endif
+#endif // 0
 
 #ifdef _WIN32
+//TODO: rename path to English file
 void sound_by_mciSendCommand(py::str path, float midi_duration)
 {
     // I don't know why this will fail to play
