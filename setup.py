@@ -30,7 +30,7 @@ setuptools.setup(
             name="plmidi_cpp",
             language="c++",
             sources=[
-                "release/release.cpp"
+                "plmidi_cpp/setup.cpp"
             ],
             extra_compile_args=compile_args
         )

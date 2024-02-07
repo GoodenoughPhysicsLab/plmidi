@@ -11,7 +11,7 @@ release/
 *.egg-info/
 __pycache__/
 
-*.i
+*.zip
 *.pyc
 *.pyd
 *.txt
