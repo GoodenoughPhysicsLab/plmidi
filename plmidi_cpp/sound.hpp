@@ -5,7 +5,6 @@
 #endif // _WIN32
 
 #include <string>
-#include <signal.h> /* Press ctrl+C to exit */
 #ifdef _WIN32
 #include <Windows.h>
 #include <mmsystem.h>
@@ -16,38 +15,36 @@
 
 namespace py = pybind11;
 
-namespace plmidi::details {
+namespace detail {
 
-// if Ctrl+C, then exit
+volatile bool is_signal = false; // should I use atomic<bool> ?
+
 static void plmidi_exit(int signal)
 {
     if (signal == SIGINT) {
-        puts("\n");
-        Py_Exit(0);
+        is_signal = true;
     }
 }
 
-} // namespace plmidi::detils
+} // namespace detil
 
 namespace plmidi {
 
-// plmidiInitError
-struct plmidiExc_InitErr : public ::std::exception
+struct plmidiInitError : public ::std::exception
 {
     const char *err_msg = "module plmidi init fail";
 
-    plmidiExc_InitErr() = default;
-    plmidiExc_InitErr(const char *text) {
+    plmidiInitError() = default;
+    plmidiInitError(const char *text) {
         err_msg = text;
     }
-    ~plmidiExc_InitErr() = default;
+    ~plmidiInitError() = default;
 
     const char* what() const noexcept override {
         return err_msg;
     }
 };
 
-// plmidiInitError
 struct OpenMidiFileError : public ::std::exception
 {
     const char *err_msg = "Failed to open MIDI file";
@@ -57,6 +54,21 @@ struct OpenMidiFileError : public ::std::exception
         err_msg = text;
     }
     ~OpenMidiFileError() = default;
+
+    const char* what() const noexcept override {
+        return err_msg;
+    }
+};
+
+struct plmidi_KeyBordInterrupt : public ::std::exception
+{
+    const char *err_msg = "KeyBord interrupt";
+
+    plmidi_KeyBordInterrupt() = default;
+    plmidi_KeyBordInterrupt(const char *text) {
+        err_msg = text;
+    }
+    ~plmidi_KeyBordInterrupt() = default;
 
     const char* what() const noexcept override {
         return err_msg;
@@ -127,9 +139,6 @@ void sound_by_mciSendCommand(py::str path, float midi_duration)
 
     process_bar::MidiProcessBar pb{midi_duration};
 
-    // init exit
-    signal(SIGINT, details::plmidi_exit);
-
     // Open MIDI file
     MCI_OPEN_PARMS mciOpenParms;
     mciOpenParms.lpstrDeviceType = "sequencer";
@@ -142,7 +151,7 @@ void sound_by_mciSendCommand(py::str path, float midi_duration)
     MCI_PLAY_PARMS mciPlayParms;
     if (mciSendCommand(mciOpenParms.wDeviceID, MCI_PLAY, 0, (DWORD_PTR)&mciPlayParms) != 0) {
         mciSendCommand(mciOpenParms.wDeviceID, MCI_CLOSE, 0, 0); // Close the device
-        throw plmidiExc_InitErr("Failed to play MIDI file");
+        throw plmidiInitError("Failed to play MIDI file");
     }
 
     // Continuously check the status of MIDI playback
@@ -159,6 +168,16 @@ void sound_by_mciSendCommand(py::str path, float midi_duration)
             break;
         }
 
+        if (detail::is_signal) {
+            puts("\n");
+
+            if (mciSendCommand(mciOpenParms.wDeviceID, MCI_CLOSE, 0, 0) != 0) {
+                throw plmidiInitError("Failed to close MIDI device");
+            }
+
+            throw plmidi_KeyBordInterrupt();
+        }
+
         pb.print();
         Sleep(100); // Sleep for a short duration before checking again
         pb.update();
@@ -166,7 +185,7 @@ void sound_by_mciSendCommand(py::str path, float midi_duration)
 
     // Close MIDI device
     if (mciSendCommand(mciOpenParms.wDeviceID, MCI_CLOSE, 0, 0) != 0) {
-        throw plmidiExc_InitErr("Failed to close MIDI device");
+        throw plmidiInitError("Failed to close MIDI device");
     }
 }
 #endif // _WIN32
@@ -176,7 +195,6 @@ void sound(py::str path, float midi_duration)
 #ifdef _WIN32
     sound_by_mciSendCommand(path, midi_duration);
 #else
-    signal(SIGINT, details::plmidi_exit);
     py::print("can not support sound plmidi on os except windows");
 #endif
 }
