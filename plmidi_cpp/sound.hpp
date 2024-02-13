@@ -62,7 +62,7 @@ struct OpenMidiFileError : public ::std::exception
 
 struct plmidi_KeyBordInterrupt : public ::std::exception
 {
-    const char *err_msg = "KeyBord interrupt";
+    const char *err_msg = "Keybord interrupt";
 
     plmidi_KeyBordInterrupt() = default;
     plmidi_KeyBordInterrupt(const char *text) {
@@ -129,7 +129,6 @@ void sound_by_midiOutShortMsg(py::list piece, int tempo)
 #endif // 0
 
 #ifdef _WIN32
-//TODO: rename path to English file
 void sound_by_mciSendCommand(py::str path, float midi_duration)
 {
     // I don't know why this will fail to play
@@ -169,8 +168,6 @@ void sound_by_mciSendCommand(py::str path, float midi_duration)
         }
 
         if (detail::is_signal) {
-            puts("\n");
-
             if (mciSendCommand(mciOpenParms.wDeviceID, MCI_CLOSE, 0, 0) != 0) {
                 throw plmidiInitError("Failed to close MIDI device");
             }
