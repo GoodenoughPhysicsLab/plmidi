@@ -8,7 +8,7 @@ else:
 
 setuptools.setup(
     name="plmidi",
-    version="",
+    version="1.1.0",
     author="Goodenough",
     author_email="2381642961@qq.com",
     description="midi player for Python Package physicsLab",
