@@ -1,10 +1,7 @@
 #pragma once
 
 #include <chrono>
-#include <iostream>
-#include "pybind11/pybind11.h"
 
-namespace py = pybind11;
 namespace stdtime = ::std::chrono;
 
 namespace plmidi::process_bar
@@ -17,6 +14,7 @@ class MidiProcessBar {
     time_t _now_time = 0;
     int _midi_duration = 0;
     float _unit_time = 0;
+    char print_cache[_length + 1];
 public:
     MidiProcessBar(float midi_duration) {
         this->_unit_time = midi_duration / this->_length;
@@ -24,7 +22,7 @@ public:
     }
 
     ~MidiProcessBar() {
-        py::print("\n");
+        ::std::puts("\n");
     }
 
     bool is_not_end() const {
@@ -44,17 +42,16 @@ public:
         this->_status = static_cast<int>(this->_now_time / this->_unit_time);
     }
 
-    void print() const {
-        ::std::cout << "\r";
-
+    void print() {
         int i{0};
         for (; i < this->_status; ++i) {
-            ::std::cout << "-";
+            this->print_cache[i] = '-';
         }
         for (; i < this->_length; ++i) {
-            ::std::cout << " ";
+            this->print_cache[i] = ' ';
         }
-        ::std::cout << " " << this->_now_time <<  "/" <<  this->_midi_duration;
+        this->print_cache[this->_length] = '\0';
+        ::std::printf("%s %lld/%d\r", this->print_cache, this->_now_time, this->_midi_duration);
     }
 };
 

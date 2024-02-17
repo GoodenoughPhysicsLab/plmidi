@@ -1,12 +1,11 @@
 import os
-import math
 import shutil
 import string
 import os.path as path
 
 import mido
 
-from .plmidi_cpp import sound as _sound, plmidi_KeyBordInterrupt
+from plmidi_cpp import sound as _sound, plmidi_KeyBordInterrupt
 
 OUTPUT_MIDI_NAME: str = "._Plm_temp_.mid"
 
@@ -26,7 +25,7 @@ def sound(midifile: str):
         midi_duration += msg.time
 
     try:
-        _sound(midifile, math.ceil(midi_duration))
+        _sound(midifile, round(midi_duration))
     except plmidi_KeyBordInterrupt:
         pass
 

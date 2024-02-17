@@ -1,14 +1,17 @@
 #pragma once
 
-#ifdef _WIN32
-#pragma comment(lib, "winmm.lib")
-#endif // _WIN32
+#include "define.hpp"
 
+#ifdef PLMIDI_IS_WINDOWS
+#pragma comment(lib, "winmm.lib")
+#endif // PLMIDI_IS_WINDOWS
+
+#include <csignal>
 #include <string>
-#ifdef _WIN32
+#ifdef PLMIDI_IS_WINDOWS
 #include <Windows.h>
 #include <mmsystem.h>
-#endif // _WIN32
+#endif // PLMIDI_IS_WINDOWS
 
 #include "process_bar.hpp"
 #include "pybind11/pybind11.h"
@@ -128,7 +131,7 @@ void sound_by_midiOutShortMsg(py::list piece, int tempo)
 }
 #endif // 0
 
-#ifdef _WIN32
+#ifdef PLMIDI_IS_WINDOWS
 void sound_by_mciSendCommand(py::str path, float midi_duration)
 {
     // I don't know why this will fail to play
@@ -185,15 +188,15 @@ void sound_by_mciSendCommand(py::str path, float midi_duration)
         throw plmidiInitError("Failed to close MIDI device");
     }
 }
-#endif // _WIN32
+#endif // PLMIDI_IS_WINDOWS
 
 void sound(py::str path, float midi_duration)
 {
-#ifdef _WIN32
+#ifdef PLMIDI_IS_WINDOWS
     sound_by_mciSendCommand(path, midi_duration);
-#else
+#else // PLMIDI_IS_WINDOWS
     py::print("can not support sound plmidi on os except windows");
-#endif
+#endif // PLMIDI_IS_WINDOWS
 }
 
 } // namespace plmidi
