@@ -1,6 +1,7 @@
 #pragma once
 
 #include <chrono>
+#include <cstring>
 
 namespace stdtime = ::std::chrono;
 
@@ -14,7 +15,6 @@ class MidiProcessBar {
     time_t _now_time = 0;
     int _midi_duration = 0;
     float _unit_time = 0;
-    char print_cache[_length + 1];
 public:
     MidiProcessBar(float midi_duration) {
         this->_unit_time = midi_duration / this->_length;
@@ -38,20 +38,19 @@ public:
     }
 
     void update() {
-        this->_now_time = stdtime::system_clock::to_time_t(stdtime::system_clock::now()) - this->_start_time;
-        this->_status = static_cast<int>(this->_now_time / this->_unit_time);
+        if (this->_status <= this->_length) {
+            this->_now_time = stdtime::system_clock::to_time_t(stdtime::system_clock::now()) - this->_start_time;
+            this->_status = static_cast<int>(this->_now_time / this->_unit_time);
+        }
     }
 
-    void print() {
-        int i{0};
-        for (; i < this->_status; ++i) {
-            this->print_cache[i] = '-';
-        }
-        for (; i < this->_length; ++i) {
-            this->print_cache[i] = ' ';
-        }
-        this->print_cache[this->_length] = '\0';
-        ::std::printf("%s %lld/%d\r", this->print_cache, this->_now_time, this->_midi_duration);
+    void print() const {
+        char print_cache[_length + 1];
+        memset(print_cache, '-', this->_status);
+        memset(print_cache + this->_status, ' ', this->_length - this->_status);
+
+        print_cache[this->_length] = '\0';
+        ::std::printf("%s %lld/%d\r", print_cache, this->_now_time, this->_midi_duration);
     }
 };
 
