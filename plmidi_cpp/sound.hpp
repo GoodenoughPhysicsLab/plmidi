@@ -6,7 +6,6 @@
 #pragma comment(lib, "winmm.lib")
 #endif // PLMIDI_IS_WINDOWS
 
-#include <csignal>
 #include <string>
 #if PLMIDI_IS_WINDOWS
 #include <Windows.h>
@@ -17,19 +16,6 @@
 #include "pybind11/pybind11.h"
 
 namespace py = pybind11;
-
-namespace detail {
-
-volatile bool is_signal = false; // should I use atomic<bool> ?
-
-static void plmidi_exit(int signal)
-{
-    if (signal == SIGINT) {
-        is_signal = true;
-    }
-}
-
-} // namespace detil
 
 namespace plmidi {
 
@@ -170,7 +156,7 @@ void sound_by_mciSendCommand(py::str path, float midi_duration)
             break;
         }
 
-        if (detail::is_signal) {
+        if (PyErr_CheckSignals()) {
             if (mciSendCommand(mciOpenParms.wDeviceID, MCI_CLOSE, 0, 0) != 0) {
                 throw plmidiInitError("Failed to close MIDI device");
             }
