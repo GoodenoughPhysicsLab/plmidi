@@ -49,21 +49,6 @@ struct OpenMidiFileError : public ::std::exception
     }
 };
 
-struct plmidi_KeyBordInterrupt : public ::std::exception
-{
-    const char *err_msg = "Keybord interrupt";
-
-    plmidi_KeyBordInterrupt() = default;
-    plmidi_KeyBordInterrupt(const char *text) {
-        err_msg = text;
-    }
-    ~plmidi_KeyBordInterrupt() = default;
-
-    const char* what() const noexcept override {
-        return err_msg;
-    }
-};
-
 #if 0
 static int8_t plmidi_initflag = 0; // -1: fail, 0: ready to init, 1: success initialized
 
@@ -156,12 +141,13 @@ void sound_by_mciSendCommand(py::str path, float midi_duration)
             break;
         }
 
-        if (PyErr_CheckSignals()) {
+        if (PyErr_CheckSignals()) // KeyboardInterrupt
+        {
             if (mciSendCommand(mciOpenParms.wDeviceID, MCI_CLOSE, 0, 0) != 0) {
                 throw plmidiInitError("Failed to close MIDI device");
             }
 
-            throw plmidi_KeyBordInterrupt();
+            throw py::error_already_set(); // KeyboardInterrupt
         }
 
         pb.print();

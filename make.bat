@@ -1,7 +1,7 @@
 @echo off
 
 rd /s /q .\build
-del .\plmidi\*.pyd
+del .\*.pyd
 
 .\venv\Scripts\python.exe setup.py build
 

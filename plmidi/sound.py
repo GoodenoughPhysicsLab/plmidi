@@ -5,7 +5,7 @@ import os.path as path
 
 import mido
 
-from plmidi_cpp import sound as _sound, plmidi_KeyBordInterrupt
+from plmidi_cpp import sound as _sound
 
 OUTPUT_MIDI_NAME: str = "._Plm_temp_.mid"
 
@@ -26,7 +26,7 @@ def sound(midifile: str):
 
     try:
         _sound(midifile, round(midi_duration))
-    except plmidi_KeyBordInterrupt:
+    except KeyboardInterrupt:
         pass
 
     if path.exists(OUTPUT_MIDI_NAME):
