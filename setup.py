@@ -1,14 +1,10 @@
-import platform
 import setuptools
 
-if platform.system() == "Windows":
-    compile_args = ["/std:c++20"]
-else:
-    compile_args = ["-std=c++20"]
+compile_args = ["/std:c++20"]
 
 setuptools.setup(
     name="plmidi",
-    version="1.1.1",
+    version="1.1.2",
     author="Goodenough",
     author_email="2381642961@qq.com",
     description="midi player for Python Package physicsLab",
