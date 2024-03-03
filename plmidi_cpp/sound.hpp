@@ -1,7 +1,5 @@
 #pragma once
 
-#include "define.hpp"
-
 #pragma comment(lib, "winmm.lib")
 
 #include <string>
@@ -154,11 +152,6 @@ void sound_by_mciSendCommand(py::str path, float midi_duration)
     if (mciSendCommand(mciOpenParms.wDeviceID, MCI_CLOSE, 0, 0) != 0) {
         throw plmidiInitError("Failed to close MIDI device");
     }
-}
-
-void sound(py::str path, float midi_duration)
-{
-    sound_by_mciSendCommand(path, midi_duration);
 }
 
 } // namespace plmidi

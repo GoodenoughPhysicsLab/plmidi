@@ -5,7 +5,7 @@ import os.path as path
 
 import mido
 
-from plmidi_cpp import sound as _sound
+from plmidi_cpp import sound_by_mciSendCommand
 
 OUTPUT_MIDI_NAME: str = "._Plm_temp_.mid"
 
@@ -25,7 +25,7 @@ def sound(midifile: str):
         midi_duration += msg.time
 
     try:
-        _sound(midifile, round(midi_duration))
+        sound_by_mciSendCommand(midifile, int(midi_duration))
     except KeyboardInterrupt:
         pass
 

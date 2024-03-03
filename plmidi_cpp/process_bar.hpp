@@ -38,19 +38,20 @@ public:
     }
 
     void update() {
-        if (this->_status <= this->_length) {
+        if (this->_status < this->_length) {
             this->_now_time = stdtime::system_clock::to_time_t(stdtime::system_clock::now()) - this->_start_time;
             this->_status = static_cast<int>(this->_now_time / this->_unit_time);
         }
     }
 
     void print() const {
-        char print_cache[_length + 1];
+        char print_cache[this->_length + 1];
         memset(print_cache, '-', this->_status);
         memset(print_cache + this->_status, ' ', this->_length - this->_status);
 
         print_cache[this->_length] = '\0';
-        ::std::printf("%s %lld/%d\r", print_cache, this->_now_time, this->_midi_duration);
+        auto time = this->_now_time > this->_midi_duration ? this->_midi_duration : this->_now_time;
+        ::std::printf("%s %lld/%d\r", print_cache, time, this->_midi_duration);
     }
 };
 
