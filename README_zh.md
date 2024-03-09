@@ -26,7 +26,7 @@ python -m pip install build
 
 然后就是构建了  
 ```shell
-python setup.py build
+python -m build --wheel --sdist
 ```
 
 这个工具也会自动去调用`Python.h`，因此不需用你自己操心去配路径  
