@@ -13,8 +13,10 @@ def sound(midifile: str, is_print: bool = True):
         raise TypeError
     
     ascii_chars = tuple(string.ascii_letters + string.digits + string.punctuation + " ")
+    use_tmpfile: bool = False
     for char in midifile:
         if char not in ascii_chars:
+            use_tmpfile = True
             with tempfile.NamedTemporaryFile('w+t', delete=False) as _tmpfile:
                 _tmpfile.close()
             shutil.copy(midifile, _tmpfile.name)
@@ -32,5 +34,5 @@ def sound(midifile: str, is_print: bool = True):
     except KeyboardInterrupt:
         pass
 
-    if path.exists(_tmpfile.name):
+    if use_tmpfile and path.exists(_tmpfile.name):
         os.remove(_tmpfile.name)
