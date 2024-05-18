@@ -96,7 +96,57 @@ void sound_by_midiOutShortMsg(py::list piece, int tempo)
 }
 #endif // 0
 
-void sound_by_mciSendCommand(py::str path, float midi_duration)
+void sound_by_mciSendCommand(py::str path)
+{
+    ::std::string spath = path.cast<::std::string>();
+    const char *cpath = spath.c_str();
+
+    // Open MIDI file
+    MCI_OPEN_PARMS mciOpenParms;
+    mciOpenParms.lpstrDeviceType = "sequencer";
+    mciOpenParms.lpstrElementName = cpath;
+    if (mciSendCommand(0, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD_PTR)&mciOpenParms) != 0) {
+        throw OpenMidiFileError();
+    }
+
+   // Play MIDI file
+    MCI_PLAY_PARMS mciPlayParms;
+    if (mciSendCommand(mciOpenParms.wDeviceID, MCI_PLAY, 0, (DWORD_PTR)&mciPlayParms) != 0) {
+        mciSendCommand(mciOpenParms.wDeviceID, MCI_CLOSE, 0, 0); // Close the device
+        throw plmidiInitError("Failed to play MIDI file");
+    }
+
+    // Continuously check the status of MIDI playback
+    while (true) {
+        MCI_STATUS_PARMS mciStatusParms;
+        mciStatusParms.dwItem = MCI_STATUS_MODE;
+        if (mciSendCommand(mciOpenParms.wDeviceID, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&mciStatusParms) != 0) {
+            py::print("Failed to check MIDI playback status");
+            break;
+        }
+
+        if (mciStatusParms.dwReturn == MCI_MODE_STOP) {
+            // MIDI playback has reached the end
+            break;
+        }
+
+        if (PyErr_CheckSignals()) // KeyboardInterrupt
+        {
+            if (mciSendCommand(mciOpenParms.wDeviceID, MCI_CLOSE, 0, 0) != 0) {
+                throw plmidiInitError("Failed to close MIDI device");
+            }
+
+            throw py::error_already_set(); // KeyboardInterrupt
+        }
+    }
+
+    // Close MIDI device
+    if (mciSendCommand(mciOpenParms.wDeviceID, MCI_CLOSE, 0, 0) != 0) {
+        throw plmidiInitError("Failed to close MIDI device");
+    }
+}
+
+void sound_by_mciSendCommand_with_duration(py::str path, float midi_duration)
 {
     // I don't know why this will fail to play
     // const char *cpath = path.cast<::std::string>().c_str();

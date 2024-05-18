@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdio>
 #include <chrono>
 #include <cstring>
 
@@ -22,7 +23,7 @@ public:
     }
 
     ~MidiProcessBar() {
-        ::std::puts("\n");
+        ::std::puts("");
     }
 
     bool is_not_end() const {

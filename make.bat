@@ -1,7 +1,11 @@
 @echo off
 
-rd /s /q .\build
-del .\*.pyd
+if exist .\build (
+    rd /s /q .\build
+)
+if exist .\*.pyd (
+    del .\*.pyd
+)
 
 .\venv\Scripts\python.exe setup.py build
 
