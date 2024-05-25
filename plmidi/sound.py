@@ -11,7 +11,7 @@ from plmidi_cpp import sound_by_mciSendCommand, sound_by_mciSendCommand_with_dur
 def sound(midifile: str, is_print: bool = True):
     if not isinstance(midifile, str) and not path.exists(midifile):
         raise TypeError
-    
+
     ascii_chars = tuple(string.ascii_letters + string.digits + string.punctuation + " ")
     use_tmpfile: bool = False
     for char in midifile:
@@ -33,6 +33,6 @@ def sound(midifile: str, is_print: bool = True):
             sound_by_mciSendCommand(midifile)
     except KeyboardInterrupt:
         pass
-
-    if use_tmpfile and path.exists(_tmpfile.name):
-        os.remove(_tmpfile.name)
+    finally:
+        if use_tmpfile and path.exists(_tmpfile.name):
+            os.remove(_tmpfile.name)
