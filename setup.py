@@ -1,11 +1,12 @@
 import setuptools
 
+# Only use MSVC to build
 compile_args = ["/std:c++20"]
 
 setuptools.setup(
     name="plmidi",
-    version="1.1.2",
-    author="Goodenough",
+    version="1.1.3",
+    author="Arendelle",
     author_email="2381642961@qq.com",
     description="midi player for Python Package physicsLab",
     long_description="show detils in [github](https://github.com/GoodenoughPhysicsLab/plmidi)",
